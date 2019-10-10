@@ -1,0 +1,63 @@
+buildscript {
+
+    ext.kotlin_version = '1.3.50'
+    ext.junit_platform_version = "1.2.0"
+    ext.arrow_version = "0.8.2"
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'net.nmandery'
+version '1.0-SNAPSHOT'
+
+apply plugin: "kotlin"
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+test {
+    useJUnitPlatform()
+
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.locationtech.jts:jts-core:1.16.1"
+    // compile "org.choco-solver:choco-solver:4.10.1"
+    compile "com.graphhopper:jsprit-core:1.7.3"
+    compile "io.arrow-kt:arrow-core:$arrow_version"
+    compile "io.arrow-kt:arrow-data:$arrow_version"
+
+
+
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+}
+
+apply plugin: "kotlin"
+apply plugin: 'maven'
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    test.kotlin.srcDirs += 'test/main/kotlin'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
