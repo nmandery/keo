@@ -1,4 +1,4 @@
-package net.nmandery.geoalgo.web
+package net.nmandery.keoalgo.web
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec

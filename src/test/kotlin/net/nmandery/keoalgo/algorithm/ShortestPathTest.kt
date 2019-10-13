@@ -1,4 +1,4 @@
-package net.nmandery.geoalgo.algorithm
+package net.nmandery.keoalgo.algorithm
 
 import arrow.core.None
 import arrow.core.Some

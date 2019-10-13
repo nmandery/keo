@@ -1,4 +1,4 @@
-package net.nmandery.geoalgo.web
+package net.nmandery.keoalgo.web
 
 import org.locationtech.jts.geom.Coordinate
 import kotlin.math.*
