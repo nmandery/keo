@@ -26,7 +26,7 @@ class TileGrid(val extend: Envelope, val tileSize: Int = 1024, val maxZoom: Int 
         val width = extend.maxX - extend.minX
         val maxResolution = (width / tileSize.toDouble()).coerceAtLeast(height / tileSize.toDouble())
 
-        return (1..maxZoom)
+        return (0..maxZoom)
             .map { maxResolution / 2.0.pow(it.toDouble()) }
             .toList()
     }
@@ -47,4 +47,14 @@ class TileGrid(val extend: Envelope, val tileSize: Int = 1024, val maxZoom: Int 
 
     fun bounds(tile: Tile) = bounds(tile.z, tile.x, tile.y)
 
+    /**
+     * extend in number of tiles for the given z
+     */
+    fun tileExtend(z: Int): Pair<Int, Int> {
+        val r = getResolution(z)
+        return Pair(
+            ((extend.maxX - extend.minX) / (tileSize * r)).toInt(),
+            ((extend.maxY - extend.minY) / (tileSize * r)).toInt()
+        )
+    }
 }
