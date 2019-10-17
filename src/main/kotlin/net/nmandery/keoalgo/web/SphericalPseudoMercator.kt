@@ -1,7 +1,10 @@
 package net.nmandery.keoalgo.web
 
 import org.locationtech.jts.geom.Coordinate
-import kotlin.math.*
+import kotlin.math.atan
+import kotlin.math.exp
+import kotlin.math.ln
+import kotlin.math.tan
 
 // https://wiki.openstreetmap.org/wiki/Mercator
 
@@ -24,7 +27,7 @@ fun lonLatToSphericalPseudoMercator(c: Coordinate) = lonLatToSphericalPseudoMerc
 
 fun sphericalPseudoMercatorToLonLat(x: Double, y: Double) = Coordinate(
     Math.toDegrees(x / EARTH_RADIUS),
-    Math.toDegrees(atan(exp(y / EARTH_RADIUS)) * 2 - (Math.PI/2))
+    Math.toDegrees(atan(exp(y / EARTH_RADIUS)) * 2 - (Math.PI / 2))
 )
 
 fun sphericalPseudoMercatorToLonLat(c: Coordinate) = sphericalPseudoMercatorToLonLat(c.x, c.y)
