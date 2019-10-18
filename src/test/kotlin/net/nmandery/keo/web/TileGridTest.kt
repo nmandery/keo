@@ -1,4 +1,4 @@
-package net.nmandery.keoalgo.web
+package net.nmandery.keo.web
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec

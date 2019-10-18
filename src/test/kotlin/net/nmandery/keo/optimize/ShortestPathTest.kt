@@ -1,4 +1,4 @@
-package net.nmandery.keoalgo.optimize
+package net.nmandery.keo.optimize
 
 import arrow.core.None
 import arrow.core.Some

@@ -1,4 +1,4 @@
-package net.nmandery.keoalgo.web
+package net.nmandery.keo.web
 
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.Envelope

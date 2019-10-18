@@ -1,4 +1,4 @@
-package net.nmandery.keoalgo.io.geojson
+package net.nmandery.keo.io.geojson
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
@@ -47,5 +47,5 @@ open class FeatureCollection<F : Feature<*, *>>() {
         this.features = features
     }
 
-    fun size() = features?.size
+    fun size() = features.size
 }

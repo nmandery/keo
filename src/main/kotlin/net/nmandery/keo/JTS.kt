@@ -1,4 +1,4 @@
-package net.nmandery.keoalgo
+package net.nmandery.keo
 
 import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.geom.util.GeometryCombiner
