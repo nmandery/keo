@@ -5,4 +5,5 @@
 /gradle/
 /gradlew
 /gradlew.bat
-
+/*/build
+/*/.kotlintest
