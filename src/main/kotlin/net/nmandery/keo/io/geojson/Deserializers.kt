@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.CoordinateSequence
-import org.locationtech.jts.geom.CoordinateSequenceFactory
-import org.locationtech.jts.geom.Geometry
+import org.locationtech.jts.geom.*
 
 class GeometryDeserializer<T : Geometry>(private val geometryParser: GeometryParser<T>) : JsonDeserializer<T>() {
     override fun deserialize(jsonParser: JsonParser, deserializationContext: DeserializationContext): T {
@@ -33,5 +30,12 @@ class CoordinateSequenceDeserializer(private val coordinateSequenceFactory: Coor
         return coordinateSequenceFactory.create(
             readCoordinates(root, deserializationContext)
         )
+    }
+}
+
+class EnvelopeDeserializer() : JsonDeserializer<Envelope>() {
+    override fun deserialize(jsonParser: JsonParser, deserializationContext: DeserializationContext): Envelope {
+        val node = jsonParser.codec.readTree<JsonNode>(jsonParser)
+        return readEnvelope(node, deserializationContext)
     }
 }

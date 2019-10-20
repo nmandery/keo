@@ -20,7 +20,7 @@ private fun serializeCoordinate(c: Coordinate, gen: JsonGenerator, inArray: Bool
     }
 }
 
-class CoordinateSerializer: JsonSerializer<Coordinate>() {
+class CoordinateSerializer : JsonSerializer<Coordinate>() {
 
     override fun handledType() = Coordinate::class.java
 
@@ -28,7 +28,7 @@ class CoordinateSerializer: JsonSerializer<Coordinate>() {
         serializeCoordinate(value, gen, true)
 }
 
-class CoordinateSequenceSerializer: JsonSerializer<CoordinateSequence>() {
+class CoordinateSequenceSerializer : JsonSerializer<CoordinateSequence>() {
     override fun handledType() = CoordinateSequence::class.java
 
     override fun serialize(value: CoordinateSequence, gen: JsonGenerator, provider: SerializerProvider) {
@@ -36,6 +36,29 @@ class CoordinateSequenceSerializer: JsonSerializer<CoordinateSequence>() {
         (0 until value.size())
             .forEach { serializeCoordinate(value.getCoordinate(it), gen, true) }
         gen.writeEndArray()
+    }
+}
+
+class EnvelopeSerializer(private val configuration: JTSGeoJsonConfiguration) : JsonSerializer<Envelope>() {
+    override fun handledType() = Envelope::class.java
+
+    override fun serialize(value: Envelope, gen: JsonGenerator, provider: SerializerProvider) {
+        if (configuration.serializeEnvelopesAsObjects) {
+            gen.writeStartObject()
+            gen.writeObjectField(EnvelopeKey.minx.key, value.minX)
+            gen.writeObjectField(EnvelopeKey.miny.key, value.minY)
+            gen.writeObjectField(EnvelopeKey.maxx.key, value.maxX)
+            gen.writeObjectField(EnvelopeKey.maxy.key, value.maxY)
+            gen.writeEndObject()
+        } else {
+            // openlayers-compatible format
+            gen.writeStartArray()
+            gen.writeNumber(value.minX)
+            gen.writeNumber(value.minY)
+            gen.writeNumber(value.maxX)
+            gen.writeNumber(value.maxY)
+            gen.writeEndArray()
+        }
     }
 }
 

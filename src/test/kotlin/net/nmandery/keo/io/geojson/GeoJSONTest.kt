@@ -51,9 +51,9 @@ class GeoJSONTest : StringSpec({
     fun makePoint(x: Double, y: Double) =
         Point(CoordinateArraySequenceFactory.instance().create(arrayOf(Coordinate(x, y))), gf)
 
-    fun objectMapper(): ObjectMapper {
+    fun objectMapper(cfg: JTSGeoJsonConfiguration = JTSGeoJsonConfiguration()): ObjectMapper {
         val om = jacksonObjectMapper()
-        om.registerJTSGeoJSON()
+        om.registerJTSGeoJSON(configuration = cfg)
         return om
     }
 
@@ -243,5 +243,53 @@ class GeoJSONTest : StringSpec({
         )
         val om = objectMapper()
         om.writeValueAsString(cs).shouldBe("[[23.4,12.3,1.3],[33.4,22.3,11.3]]")
+    }
+
+    "envelope serialize as array" {
+        val e = Envelope(12.3, 45.2, 16.8, 33.2)
+        val om = objectMapper(JTSGeoJsonConfiguration(serializeEnvelopesAsObjects = false))
+        om.writeValueAsString(e).shouldBe(
+            "[${e.minX},${e.minY},${e.maxX},${e.maxY}]"
+        )
+    }
+
+    "envelope serialize as object" {
+        val e = Envelope(12.3, 45.2, 16.8, 33.2)
+        val om = objectMapper(JTSGeoJsonConfiguration(serializeEnvelopesAsObjects = true))
+        om.writeValueAsString(e).shouldBe(
+            """{"minx":${e.minX},"miny":${e.minY},"maxx":${e.maxX},"maxy":${e.maxY}}"""
+        )
+    }
+
+    "envelope deserialize from object" {
+        val minX = 45.2
+        val maxX = 63.2
+        val minY = 12.3
+        val maxY = 33.4
+        val e = objectMapper().readValue(
+            """{"minx":${minX},"miny":${minY},"maxx":${maxX},"maxy":${maxY}}""",
+            Envelope::class.java
+        )
+        e.shouldNotBeNull()
+        e.maxY.shouldBe(maxY)
+        e.minY.shouldBe(minY)
+        e.maxX.shouldBe(maxX)
+        e.minX.shouldBe(minX)
+    }
+
+    "envelope deserialize from array" {
+        val minX = 45.2
+        val maxX = 63.2
+        val minY = 12.3
+        val maxY = 33.4
+        val e = objectMapper().readValue(
+            """[${minX},${minY},"${maxX}",${maxY}]""",
+            Envelope::class.java
+        )
+        e.shouldNotBeNull()
+        e.maxY.shouldBe(maxY)
+        e.minY.shouldBe(minY)
+        e.maxX.shouldBe(maxX)
+        e.minX.shouldBe(minX)
     }
 })

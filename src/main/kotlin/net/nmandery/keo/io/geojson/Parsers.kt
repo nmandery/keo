@@ -145,3 +145,31 @@ class GenericGeometryParser(gf: GeometryFactory) : GeometryParser<Geometry>(gf) 
     }
 }
 
+internal fun readEnvelope(node: JsonNode, context: DeserializationContext): Envelope {
+    if (node.isObject) {
+        return Envelope(
+            node.get(EnvelopeKey.maxx.key).asDouble(),
+            node.get(EnvelopeKey.minx.key).asDouble(),
+            node.get(EnvelopeKey.maxy.key).asDouble(),
+            node.get(EnvelopeKey.miny.key).asDouble()
+        )
+    } else if (node.isArray) {
+        if (node.size() != 4) {
+            throw JsonMappingException.from(
+                context,
+                "Envelope arrays must have 4 elements"
+            )
+        }
+        return Envelope(
+            node.get(0).asDouble(),
+            node.get(2).asDouble(),
+            node.get(1).asDouble(),
+            node.get(3).asDouble()
+        )
+    } else {
+        throw JsonMappingException.from(
+            context,
+            "Unsupported value type for an Envelope type"
+        )
+    }
+}

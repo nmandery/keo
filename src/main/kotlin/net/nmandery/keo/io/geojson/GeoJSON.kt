@@ -23,6 +23,13 @@ internal enum class GeometryType(val ident: String) {
     GeometryCollection("GeometryCollection"),
 }
 
+internal enum class EnvelopeKey(val key: String) {
+    maxx("maxx"),
+    minx("minx"),
+    maxy("maxy"),
+    miny("miny")
+}
+
 private val objectMapper = Eval.later {
     val om = jacksonObjectMapper()
     om.registerJTSGeoJSON()
@@ -31,13 +38,29 @@ private val objectMapper = Eval.later {
 
 fun Geometry.geojsonGeometry() = objectMapper.value.writeValueAsString(this)
 
+data class JTSGeoJsonConfiguration(
 
-class JTSGeoJSON(val gf: GeometryFactory = GeometryFactory()) : SimpleModule("JTSGeoJSON") {
+    /**
+     * serialize Envelope object to JSON objects.
+     *
+     * The default is using arrays int the openlayers-compatible value order
+     * [minx, miny, maxx, maxy]
+     *
+     * https://openlayers.org/en/latest/apidoc/module-ol_extent.html#~Extent
+     */
+    val serializeEnvelopesAsObjects: Boolean = false
+)
+
+class JTSGeoJSON(
+    val configuration: JTSGeoJsonConfiguration = JTSGeoJsonConfiguration(),
+    val gf: GeometryFactory = GeometryFactory()
+) : SimpleModule("JTSGeoJSON") {
 
     init {
         addSerializer(Geometry::class.java, GeometrySerializer())
         addSerializer(Coordinate::class.java, CoordinateSerializer())
         addSerializer(CoordinateSequence::class.java, CoordinateSequenceSerializer())
+        addSerializer(Envelope::class.java, EnvelopeSerializer(configuration))
 
         addDeserializer(Geometry::class.java, GeometryDeserializer(GenericGeometryParser(gf)))
         addDeserializer(Point::class.java, GeometryDeserializer(PointParser(gf)))
@@ -49,6 +72,7 @@ class JTSGeoJSON(val gf: GeometryFactory = GeometryFactory()) : SimpleModule("JT
         addDeserializer(GeometryCollection::class.java, GeometryDeserializer(GeometryCollectionParser(gf)))
         addDeserializer(Coordinate::class.java, CoordinateDeserializer())
         addDeserializer(CoordinateSequence::class.java, CoordinateSequenceDeserializer(gf.coordinateSequenceFactory))
+        addDeserializer(Envelope::class.java, EnvelopeDeserializer())
     }
 
     override fun setupModule(context: SetupContext) {
@@ -56,10 +80,9 @@ class JTSGeoJSON(val gf: GeometryFactory = GeometryFactory()) : SimpleModule("JT
     }
 }
 
-fun ObjectMapper.registerJTSGeoJSON(gf: GeometryFactory) {
-    this.registerModule(JTSGeoJSON(gf))
-}
-
-fun ObjectMapper.registerJTSGeoJSON() {
-    this.registerModule(JTSGeoJSON())
+fun ObjectMapper.registerJTSGeoJSON(
+    configuration: JTSGeoJsonConfiguration = JTSGeoJsonConfiguration(),
+    gf: GeometryFactory = GeometryFactory()
+) {
+    this.registerModule(JTSGeoJSON(configuration, gf))
 }
