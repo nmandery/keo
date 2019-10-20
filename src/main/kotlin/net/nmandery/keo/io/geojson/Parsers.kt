@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.locationtech.jts.geom.*
 
 
-private fun readCoordinate(array: JsonNode, context: DeserializationContext): Coordinate =
+internal fun readCoordinate(array: JsonNode, context: DeserializationContext): Coordinate =
     when (array.size()) {
         2 -> Coordinate(
             array.get(0).asDouble(),
@@ -25,7 +25,7 @@ private fun readCoordinate(array: JsonNode, context: DeserializationContext): Co
     }
 
 
-private fun readCoordinates(array: JsonNode, context: DeserializationContext) =
+internal fun readCoordinates(array: JsonNode, context: DeserializationContext) =
     (0 until array.size())
         .map { array[it] }
         .mapNotNull { readCoordinate(it, context) }

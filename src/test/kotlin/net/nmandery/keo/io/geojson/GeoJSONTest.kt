@@ -10,10 +10,7 @@ import io.kotlintest.matchers.string.shouldNotBeEmpty
 import io.kotlintest.matchers.types.shouldNotBeNull
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryCollection
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.Point
+import org.locationtech.jts.geom.*
 import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory
 import org.locationtech.jts.io.WKTReader
 
@@ -155,5 +152,96 @@ class GeoJSONTest : StringSpec({
         fcDeserialized.size().shouldBe(fc.size())
         (0 until fc.size())
             .forEach { compareAnimalFeatures(fcDeserialized.features[it], fc.features[it]) }
+    }
+
+    "coordinate deserialize 2d" {
+        val x = 45.3
+        val y = 23.6
+        val om = objectMapper()
+        val c = om.readValue("[$x, $y]", Coordinate::class.java)
+        c.shouldNotBeNull()
+        c.getX().shouldBe(x)
+        c.getY().shouldBe(y)
+        c.getZ().isNaN().shouldBe(true)
+    }
+
+    "coordinate deserialize 3d" {
+        val x = 45.3
+        val y = 23.6
+        val z = 12.3
+        val om = objectMapper()
+        val c = om.readValue("[$x, $y, $z]", Coordinate::class.java)
+        c.shouldNotBeNull()
+        c.getX().shouldBe(x)
+        c.getY().shouldBe(y)
+        c.getZ().shouldBe(z)
+    }
+
+    "coordinatesequence deserialize 2d" {
+        val x1 = 45.3
+        val y1 = 23.6
+        val x2 = 45.3
+        val y2 = 23.6
+        val om = objectMapper()
+        val cs = om.readValue("[[$x1, $y1], [$x2, $y2]]", CoordinateSequence::class.java)
+        cs.shouldNotBeNull()
+        cs.size().shouldBe(2)
+        cs.getCoordinate(0).getX().shouldBe(x1)
+        cs.getCoordinate(0).getY().shouldBe(y1)
+        cs.getCoordinate(0).getZ().isNaN().shouldBe(true)
+        cs.getCoordinate(1).getX().shouldBe(x2)
+        cs.getCoordinate(1).getY().shouldBe(y2)
+        cs.getCoordinate(1).getZ().isNaN().shouldBe(true)
+    }
+
+    "coordinatesequence deserialize 3d" {
+        val x1 = 45.3
+        val y1 = 23.6
+        val z1 = 12.3
+        val x2 = 45.3
+        val y2 = 23.6
+        val z2 = 12.3
+        val om = objectMapper()
+        val cs = om.readValue("[[$x1, $y1, $z1], [$x2, $y2, $z2]]", CoordinateSequence::class.java)
+        cs.shouldNotBeNull()
+        cs.size().shouldBe(2)
+        cs.getCoordinate(0).getX().shouldBe(x1)
+        cs.getCoordinate(0).getY().shouldBe(y1)
+        cs.getCoordinate(0).getZ().shouldBe(z1)
+        cs.getCoordinate(1).getX().shouldBe(x2)
+        cs.getCoordinate(1).getY().shouldBe(y2)
+        cs.getCoordinate(1).getZ().shouldBe(z2)
+    }
+
+    "coordinate serialize 2d" {
+        val c = Coordinate(23.4, 12.3)
+        val om = objectMapper()
+        om.writeValueAsString(c).shouldBe("[23.4,12.3]")
+    }
+
+    "coordinate serialize 3d" {
+        val c = Coordinate(23.4, 12.3, 1.3)
+        val om = objectMapper()
+        om.writeValueAsString(c).shouldBe("[23.4,12.3,1.3]")
+    }
+
+    "coordinatesequence serialize 2d" {
+        val cs = gf.coordinateSequenceFactory.create(
+            arrayOf(
+                Coordinate(23.4, 12.3), Coordinate(33.4, 22.3)
+            )
+        )
+        val om = objectMapper()
+        om.writeValueAsString(cs).shouldBe("[[23.4,12.3],[33.4,22.3]]")
+    }
+
+    "coordinatesequence serialize 3d" {
+        val cs = gf.coordinateSequenceFactory.create(
+            arrayOf(
+                Coordinate(23.4, 12.3, 1.3), Coordinate(33.4, 22.3, 11.3)
+            )
+        )
+        val om = objectMapper()
+        om.writeValueAsString(cs).shouldBe("[[23.4,12.3,1.3],[33.4,22.3,11.3]]")
     }
 })

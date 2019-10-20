@@ -36,17 +36,19 @@ class JTSGeoJSON(val gf: GeometryFactory = GeometryFactory()) : SimpleModule("JT
 
     init {
         addSerializer(Geometry::class.java, GeometrySerializer())
-        addDeserializer(Geometry::class.java, GeometryDeserializer<Geometry>(GenericGeometryParser(gf)))
-        addDeserializer(Point::class.java, GeometryDeserializer<Point>(PointParser(gf)))
-        addDeserializer(LineString::class.java, GeometryDeserializer<LineString>(LineStringParser(gf)))
-        addDeserializer(Polygon::class.java, GeometryDeserializer<Polygon>(PolygonParser(gf)))
-        addDeserializer(MultiPoint::class.java, GeometryDeserializer<MultiPoint>(MultiPointParser(gf)))
-        addDeserializer(MultiLineString::class.java, GeometryDeserializer<MultiLineString>(MultiLineStringParser(gf)))
-        addDeserializer(MultiPolygon::class.java, GeometryDeserializer<MultiPolygon>(MultiPolygonParser(gf)))
-        addDeserializer(
-            GeometryCollection::class.java,
-            GeometryDeserializer<GeometryCollection>(GeometryCollectionParser(gf))
-        )
+        addSerializer(Coordinate::class.java, CoordinateSerializer())
+        addSerializer(CoordinateSequence::class.java, CoordinateSequenceSerializer())
+
+        addDeserializer(Geometry::class.java, GeometryDeserializer(GenericGeometryParser(gf)))
+        addDeserializer(Point::class.java, GeometryDeserializer(PointParser(gf)))
+        addDeserializer(LineString::class.java, GeometryDeserializer(LineStringParser(gf)))
+        addDeserializer(Polygon::class.java, GeometryDeserializer(PolygonParser(gf)))
+        addDeserializer(MultiPoint::class.java, GeometryDeserializer(MultiPointParser(gf)))
+        addDeserializer(MultiLineString::class.java, GeometryDeserializer(MultiLineStringParser(gf)))
+        addDeserializer(MultiPolygon::class.java, GeometryDeserializer(MultiPolygonParser(gf)))
+        addDeserializer(GeometryCollection::class.java, GeometryDeserializer(GeometryCollectionParser(gf)))
+        addDeserializer(Coordinate::class.java, CoordinateDeserializer())
+        addDeserializer(CoordinateSequence::class.java, CoordinateSequenceDeserializer(gf.coordinateSequenceFactory))
     }
 
     override fun setupModule(context: SetupContext) {

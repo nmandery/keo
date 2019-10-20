@@ -6,6 +6,38 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import org.locationtech.jts.geom.*
 
+private fun serializeCoordinate(c: Coordinate, gen: JsonGenerator, inArray: Boolean = true) {
+    if (inArray) {
+        gen.writeStartArray()
+    }
+    gen.writeNumber(c.getX())
+    gen.writeNumber(c.getY())
+    if (!c.getZ().isNaN()) {
+        gen.writeNumber(c.getZ())
+    }
+    if (inArray) {
+        gen.writeEndArray()
+    }
+}
+
+class CoordinateSerializer: JsonSerializer<Coordinate>() {
+
+    override fun handledType() = Coordinate::class.java
+
+    override fun serialize(value: Coordinate, gen: JsonGenerator, provider: SerializerProvider) =
+        serializeCoordinate(value, gen, true)
+}
+
+class CoordinateSequenceSerializer: JsonSerializer<CoordinateSequence>() {
+    override fun handledType() = CoordinateSequence::class.java
+
+    override fun serialize(value: CoordinateSequence, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeStartArray()
+        (0 until value.size())
+            .forEach { serializeCoordinate(value.getCoordinate(it), gen, true) }
+        gen.writeEndArray()
+    }
+}
 
 class GeometrySerializer : JsonSerializer<Geometry>() {
 
@@ -135,18 +167,7 @@ class GeometrySerializer : JsonSerializer<Geometry>() {
             serializePointCoords(p, gen, false)
         }
 
-    private fun serializePointCoords(p: Point, gen: JsonGenerator, inArray: Boolean = true) {
-        if (inArray) {
-            gen.writeStartArray()
-        }
-        gen.writeNumber(p.coordinate.getX())
-        gen.writeNumber(p.coordinate.getY())
-        if (!p.coordinate.getZ().isNaN()) {
-            gen.writeNumber(p.coordinate.getZ())
-        }
-        if (inArray) {
-            gen.writeEndArray()
-        }
-    }
+    private fun serializePointCoords(p: Point, gen: JsonGenerator, inArray: Boolean = true) =
+        serializeCoordinate(p.coordinate, gen, inArray)
 
 }
