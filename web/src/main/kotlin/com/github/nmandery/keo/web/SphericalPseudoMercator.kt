@@ -1,4 +1,4 @@
-package net.nmandery.keo.web
+package com.github.nmandery.keo.web
 
 import org.locationtech.jts.geom.Coordinate
 import kotlin.math.atan
@@ -22,7 +22,8 @@ fun lonLatToSphericalPseudoMercator(lon: Double, lat: Double) = Coordinate(
 /**
  * Returns the Spherical Mercator (x, y) in meters
  */
-fun lonLatToSphericalPseudoMercator(c: Coordinate) = lonLatToSphericalPseudoMercator(c.x, c.y)
+fun lonLatToSphericalPseudoMercator(c: Coordinate) =
+    lonLatToSphericalPseudoMercator(c.x, c.y)
 
 
 fun sphericalPseudoMercatorToLonLat(x: Double, y: Double) = Coordinate(
@@ -30,4 +31,5 @@ fun sphericalPseudoMercatorToLonLat(x: Double, y: Double) = Coordinate(
     Math.toDegrees(atan(exp(y / EARTH_RADIUS)) * 2 - (Math.PI / 2))
 )
 
-fun sphericalPseudoMercatorToLonLat(c: Coordinate) = sphericalPseudoMercatorToLonLat(c.x, c.y)
+fun sphericalPseudoMercatorToLonLat(c: Coordinate) =
+    sphericalPseudoMercatorToLonLat(c.x, c.y)

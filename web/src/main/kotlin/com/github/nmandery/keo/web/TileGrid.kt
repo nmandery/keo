@@ -1,4 +1,4 @@
-package net.nmandery.keo.web
+package com.github.nmandery.keo.web
 
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.Envelope
@@ -14,7 +14,7 @@ https://github.com/t-rex-tileserver/t-rex/blob/master/tile-grid/src/grid.rs
 https://github.com/openlayers/openlayers/blob/master/src/ol/tilegrid/TileGrid.js
 
  */
-class TileGrid(val extend: Envelope, val tileSize: Int = 1024, val maxZoom: Int = 26) {
+open class TileGrid(val extend: Envelope, val tileSize: Int = 1024, val maxZoom: Int = 26) {
 
     val resolutions = resolutionsFromExtent(extend, tileSize, maxZoom)
     val origin = topLeftFromExtend(extend)

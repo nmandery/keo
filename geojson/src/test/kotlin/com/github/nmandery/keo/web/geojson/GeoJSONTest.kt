@@ -1,4 +1,4 @@
-package net.nmandery.keo.geojson
+package com.github.nmandery.keo.web.geojson
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -26,7 +26,8 @@ class Animal(
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-class AnimalFeature : Feature<Point, Animal> {
+class AnimalFeature :
+    GenericFeature<Point, Animal> {
     constructor(location: Point, animal: Animal) : super(location, animal)
     constructor() : super()
 }
@@ -38,7 +39,8 @@ class AnimalFeature : Feature<Point, Animal> {
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-class AnimalFeatureCollection : FeatureCollection<AnimalFeature> {
+class AnimalFeatureCollection :
+    GenericFeatureCollection<AnimalFeature> {
     constructor(features: List<AnimalFeature>) : super(features)
     constructor() : super()
 }

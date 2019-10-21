@@ -1,4 +1,4 @@
-package net.nmandery.keo.optimize
+package com.github.nmandery.keo.web.optimize
 
 import arrow.core.None
 import arrow.core.Option

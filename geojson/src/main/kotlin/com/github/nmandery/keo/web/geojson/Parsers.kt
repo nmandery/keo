@@ -1,4 +1,4 @@
-package net.nmandery.keo.geojson
+package com.github.nmandery.keo.web.geojson
 
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonMappingException
@@ -39,14 +39,20 @@ abstract class GeometryParser<out T : Geometry>(protected val gf: GeometryFactor
 class PointParser(gf: GeometryFactory) : GeometryParser<Point>(gf) {
     override fun parse(node: JsonNode, context: DeserializationContext): Point =
         gf.createPoint(
-            readCoordinate(node.get(Identifier.Coordinates.ident), context)
+            readCoordinate(
+                node.get(Identifier.Coordinates.ident),
+                context
+            )
         )
 }
 
 class LineStringParser(gf: GeometryFactory) : GeometryParser<LineString>(gf) {
     override fun parse(node: JsonNode, context: DeserializationContext): LineString =
         gf.createLineString(
-            readCoordinates(node.get(Identifier.Coordinates.ident), context)
+            readCoordinates(
+                node.get(Identifier.Coordinates.ident),
+                context
+            )
         )
 }
 
@@ -79,13 +85,20 @@ private fun readPolygonFromRings(
 
 class PolygonParser(gf: GeometryFactory) : GeometryParser<Polygon>(gf) {
     override fun parse(node: JsonNode, context: DeserializationContext) =
-        readPolygonFromRings(gf, node.get(Identifier.Coordinates.ident), context)
+        readPolygonFromRings(
+            gf,
+            node.get(Identifier.Coordinates.ident),
+            context
+        )
 }
 
 class MultiPointParser(gf: GeometryFactory) : GeometryParser<MultiPoint>(gf) {
     override fun parse(node: JsonNode, context: DeserializationContext): MultiPoint =
         gf.createMultiPointFromCoords(
-            readCoordinates(node.get(Identifier.Coordinates.ident), context)
+            readCoordinates(
+                node.get(Identifier.Coordinates.ident),
+                context
+            )
         )
 }
 
@@ -132,13 +145,27 @@ class GenericGeometryParser(gf: GeometryFactory) : GeometryParser<Geometry>(gf) 
 
     override fun parse(node: JsonNode, context: DeserializationContext): Geometry {
         val parser = when (val typeName = node.get(Identifier.Type.ident).asText()) {
-            GeometryType.Point.ident -> PointParser(gf)
-            GeometryType.LineString.ident -> LineStringParser(gf)
-            GeometryType.Polygon.ident -> PolygonParser(gf)
-            GeometryType.MultiPoint.ident -> MultiPointParser(gf)
-            GeometryType.MultiLineString.ident -> MultiLineStringParser(gf)
-            GeometryType.MultiPolygon.ident -> MultiPolygonParser(gf)
-            GeometryType.GeometryCollection.ident -> GeometryCollectionParser(gf)
+            GeometryType.Point.ident -> PointParser(
+                gf
+            )
+            GeometryType.LineString.ident -> LineStringParser(
+                gf
+            )
+            GeometryType.Polygon.ident -> PolygonParser(
+                gf
+            )
+            GeometryType.MultiPoint.ident -> MultiPointParser(
+                gf
+            )
+            GeometryType.MultiLineString.ident -> MultiLineStringParser(
+                gf
+            )
+            GeometryType.MultiPolygon.ident -> MultiPolygonParser(
+                gf
+            )
+            GeometryType.GeometryCollection.ident -> GeometryCollectionParser(
+                gf
+            )
             else -> throw JsonMappingException.from(context, "Unsupported geometry type: $typeName")
         } as GeometryParser<*>
         return parser.parse(node, context)

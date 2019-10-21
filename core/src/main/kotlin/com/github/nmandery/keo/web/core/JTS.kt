@@ -1,4 +1,4 @@
-package com.github.nmandery.keo.core
+package com.github.nmandery.keo.web.core
 
 import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.geom.util.GeometryCombiner

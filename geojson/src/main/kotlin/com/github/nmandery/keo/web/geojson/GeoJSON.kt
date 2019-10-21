@@ -1,4 +1,4 @@
-package net.nmandery.keo.geojson
+package com.github.nmandery.keo.web.geojson
 
 import arrow.core.Eval
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -59,19 +59,67 @@ class JTSGeoJSON(
     init {
         addSerializer(Geometry::class.java, GeometrySerializer())
         addSerializer(Coordinate::class.java, CoordinateSerializer())
-        addSerializer(CoordinateSequence::class.java, CoordinateSequenceSerializer())
+        addSerializer(CoordinateSequence::class.java,
+            CoordinateSequenceSerializer()
+        )
         addSerializer(Envelope::class.java, EnvelopeSerializer(configuration))
 
-        addDeserializer(Geometry::class.java, GeometryDeserializer(GenericGeometryParser(gf)))
-        addDeserializer(Point::class.java, GeometryDeserializer(PointParser(gf)))
-        addDeserializer(LineString::class.java, GeometryDeserializer(LineStringParser(gf)))
-        addDeserializer(Polygon::class.java, GeometryDeserializer(PolygonParser(gf)))
-        addDeserializer(MultiPoint::class.java, GeometryDeserializer(MultiPointParser(gf)))
-        addDeserializer(MultiLineString::class.java, GeometryDeserializer(MultiLineStringParser(gf)))
-        addDeserializer(MultiPolygon::class.java, GeometryDeserializer(MultiPolygonParser(gf)))
-        addDeserializer(GeometryCollection::class.java, GeometryDeserializer(GeometryCollectionParser(gf)))
+        addDeserializer(Geometry::class.java,
+            GeometryDeserializer(
+                GenericGeometryParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(Point::class.java,
+            GeometryDeserializer(PointParser(gf))
+        )
+        addDeserializer(LineString::class.java,
+            GeometryDeserializer(
+                LineStringParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(Polygon::class.java,
+            GeometryDeserializer(
+                PolygonParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(MultiPoint::class.java,
+            GeometryDeserializer(
+                MultiPointParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(MultiLineString::class.java,
+            GeometryDeserializer(
+                MultiLineStringParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(MultiPolygon::class.java,
+            GeometryDeserializer(
+                MultiPolygonParser(
+                    gf
+                )
+            )
+        )
+        addDeserializer(GeometryCollection::class.java,
+            GeometryDeserializer(
+                GeometryCollectionParser(
+                    gf
+                )
+            )
+        )
         addDeserializer(Coordinate::class.java, CoordinateDeserializer())
-        addDeserializer(CoordinateSequence::class.java, CoordinateSequenceDeserializer(gf.coordinateSequenceFactory))
+        addDeserializer(CoordinateSequence::class.java,
+            CoordinateSequenceDeserializer(gf.coordinateSequenceFactory)
+        )
         addDeserializer(Envelope::class.java, EnvelopeDeserializer())
     }
 

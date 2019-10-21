@@ -1,4 +1,4 @@
-package net.nmandery.keo.geojson
+package com.github.nmandery.keo.web.geojson
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
