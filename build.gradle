@@ -11,13 +11,14 @@ buildscript {
 
 
 allprojects{
-    version = '1.0'
-    group 'net.nmandery.keo'
+    version = '1.0-SNAPSHOT'
+    group 'com.github.nmandery.keo'
 }
 
 subprojects {
 
     apply plugin: "kotlin"
+    apply plugin: "maven"
 
     compileKotlin {
         kotlinOptions {
