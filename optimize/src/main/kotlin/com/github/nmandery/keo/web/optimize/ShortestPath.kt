@@ -15,13 +15,14 @@ import org.locationtech.jts.geom.*
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
 import com.graphhopper.jsprit.core.util.Coordinate as JspritCoordinate
 
-
 private fun Coordinate.toJsprit() = JspritCoordinate.newInstance(x, y)
 
 private fun JspritCoordinate.toJts() = Coordinate(x, y)
 
+/**
+ * reorder the Coordinates in the List to form the shortest possible path
+ */
 fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): Option<List<Coordinate>> {
-
     if (isEmpty()) {
         return Some(emptyList())
     }
@@ -70,18 +71,28 @@ fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): O
         .flatMap { it.activities.mapNotNull { it.location?.coordinate?.toJts() } })
 }
 
+/**
+ * reorder the Coordinates in the CoordinateSequence to form the shortest possible path
+ */
 fun CoordinateSequence.optimizeOrderingForShortestPath(maxIterations: Int = 50) =
     when (val l = toCoordinateArray().asList().optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
         is Some -> Some(CoordinateArraySequence(l.t.toTypedArray()))
         is None -> None
     }
 
+/**
+ * reorder the Points in the List to form the shortest possible path
+ */
 fun List<Point>.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50) =
     when (val l = mapNotNull { it.coordinate }.optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
         is Some -> Some(l.t.mapNotNull { Point(CoordinateArraySequence(arrayOf(it)), gf) })
         is None -> None
     }
 
+
+/**
+ * reorder the Points in the LineString to form the shortest possible path
+ */
 fun LineString.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50) =
     when (val l = coordinateSequence.optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
         is Some -> Some(LineString(l.t, gf))
