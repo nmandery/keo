@@ -1,4 +1,4 @@
-package com.github.nmandery.keo.web.geojson
+package com.github.nmandery.keo.geojson
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.annotation.JsonTypeInfo

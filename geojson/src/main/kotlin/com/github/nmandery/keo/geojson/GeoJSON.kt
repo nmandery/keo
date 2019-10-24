@@ -1,4 +1,4 @@
-package com.github.nmandery.keo.web.geojson
+package com.github.nmandery.keo.geojson
 
 import arrow.core.Eval
 import com.fasterxml.jackson.databind.ObjectMapper
