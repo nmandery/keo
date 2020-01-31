@@ -2,8 +2,5 @@
 /.idea/
 /.kotlintest/
 /build/
-/gradle/
-/gradlew
-/gradlew.bat
 /*/build
 /*/.kotlintest
