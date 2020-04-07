@@ -1,8 +1,5 @@
 package com.github.nmandery.keo.web.optimize
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
 import com.graphhopper.jsprit.core.algorithm.box.Jsprit
 import com.graphhopper.jsprit.core.problem.Location
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem
@@ -22,9 +19,9 @@ private fun JspritCoordinate.toJts() = Coordinate(x, y)
 /**
  * reorder the Coordinates in the List to form the shortest possible path
  */
-fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): Option<List<Coordinate>> {
+fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): List<Coordinate>? {
     if (isEmpty()) {
-        return Some(emptyList())
+        return emptyList()
     }
 
     // based on
@@ -59,43 +56,52 @@ fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): O
     val vra = Jsprit.createAlgorithm(vrp)
     vra.maxIterations = maxIterations
 
-    val solution = Solutions.bestOf(vra.searchSolutions()) ?: return None
+    val solution = Solutions.bestOf(vra.searchSolutions()) ?: return null
 
     // SolutionPrinter.print(solution)
 
     // in case there are nodes not assigned, the ordering was not successful
     if (solution.unassignedJobs?.isEmpty() != true) {
-        return None
+        return null
     }
-    return Some(solution.routes
-        .flatMap { it.activities.mapNotNull { it.location?.coordinate?.toJts() } })
+    return solution.routes
+        .flatMap { it.activities.mapNotNull { it.location?.coordinate?.toJts() } }
 }
 
 /**
  * reorder the Coordinates in the CoordinateSequence to form the shortest possible path
  */
-fun CoordinateSequence.optimizeOrderingForShortestPath(maxIterations: Int = 50) =
-    when (val l = toCoordinateArray().asList().optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
-        is Some -> Some(CoordinateArraySequence(l.t.toTypedArray()))
-        is None -> None
+fun CoordinateSequence.optimizeOrderingForShortestPath(maxIterations: Int = 50): CoordinateArraySequence? {
+    val optimized = toCoordinateArray().asList().optimizeOrderingForShortestPath(maxIterations = maxIterations);
+    return if (optimized != null) {
+        CoordinateArraySequence(optimized.toTypedArray())
+    } else {
+        null
     }
+}
 
 /**
  * reorder the Points in the List to form the shortest possible path
  */
-fun List<Point>.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50) =
-    when (val l = mapNotNull { it.coordinate }.optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
-        is Some -> Some(l.t.mapNotNull { Point(CoordinateArraySequence(arrayOf(it)), gf) })
-        is None -> None
+fun List<Point>.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50): List<Point>? {
+    val l = mapNotNull { it.coordinate }.optimizeOrderingForShortestPath(maxIterations = maxIterations)
+    return if (l != null) {
+        l.mapNotNull { Point(CoordinateArraySequence(arrayOf(it)), gf) }
+    } else {
+        null
     }
+}
 
 
 /**
  * reorder the Points in the LineString to form the shortest possible path
  */
-fun LineString.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50) =
-    when (val l = coordinateSequence.optimizeOrderingForShortestPath(maxIterations = maxIterations)) {
-        is Some -> Some(LineString(l.t, gf))
-        is None -> None
+fun LineString.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50): LineString? {
+    val l = coordinateSequence.optimizeOrderingForShortestPath(maxIterations = maxIterations)
+    return if (l != null) {
+        LineString(l, gf)
+    } else {
+        null
     }
+}
 

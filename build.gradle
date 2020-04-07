@@ -32,7 +32,6 @@ subprojects {
     }
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-        compile "io.arrow-kt:arrow-core:$arrow_version"
         compile "org.locationtech.jts:jts-core:$jts_version"
 
         testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

@@ -1,6 +1,5 @@
 package com.github.nmandery.keo.geojson
 
-import arrow.core.Eval
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -30,13 +29,13 @@ internal enum class EnvelopeKey(val key: String) {
     miny("miny")
 }
 
-private val objectMapper = Eval.later {
+private val objectMapper: ObjectMapper by lazy {
     val om = jacksonObjectMapper()
     om.registerJTSGeoJSON()
     om
 }
 
-fun Geometry.geojsonGeometry() = objectMapper.value.writeValueAsString(this)
+fun Geometry.geojsonGeometry() = objectMapper.writeValueAsString(this)
 
 data class JTSGeoJsonConfiguration(
 
