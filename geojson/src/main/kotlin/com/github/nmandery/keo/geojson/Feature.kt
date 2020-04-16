@@ -19,18 +19,19 @@ import org.locationtech.jts.geom.Geometry
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-open class GenericFeature<G : Geometry, T : Any> {
+open class GenericFeature<G : Geometry, T : Any, I: Any> {
 
     var geometry: G? = null
 
     var properties: T? = null
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val id: Any? = null
+    var id: I? = null
 
-    constructor(geometry: G, properties: T) {
+    constructor(geometry: G?, properties: T, id: I? = null) {
         this.properties = properties
         this.geometry = geometry
+        this.id = id
     }
 
     constructor() {}
@@ -46,7 +47,7 @@ open class GenericFeature<G : Geometry, T : Any> {
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-open class GenericFeatureCollection<F : GenericFeature<*, *>>() {
+open class GenericFeatureCollection<F : GenericFeature<*, *, *>>() {
     var features = emptyList<F>()
 
     constructor(features: List<F>) : this() {
@@ -69,23 +70,12 @@ open class GenericFeatureCollection<F : GenericFeature<*, *>>() {
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-class Feature {
+class Feature: GenericFeature<Geometry, Any, Any> {
 
-    var geometry: Geometry? = null
+    constructor(geometry: Geometry?, properties: Any, id: Any? = null) : super(geometry, properties, id)
 
-    var properties: Any? = null
-
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val id: Any? = null
-
-    constructor(geometry: Geometry, properties: Any) {
-        this.properties = properties
-        this.geometry = geometry
-    }
-
-    constructor() {}
+    constructor() : super()
 }
-
 
 /**
  * non-generic featurecollection implementation. Reduces boilerplate when features are not read
@@ -99,13 +89,7 @@ class Feature {
     include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
     property = "type"
 )
-class FeatureCollection() {
-    var features = emptyList<Feature>()
-
-    constructor(features: List<Feature>) : this() {
-        this.features = features
-    }
-
-    fun size() = features.size
+class FeatureCollection: GenericFeatureCollection<Feature> {
+    constructor(features: List<Feature>) : super(features)
 }
 

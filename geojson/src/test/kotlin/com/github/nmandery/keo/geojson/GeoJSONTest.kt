@@ -27,7 +27,7 @@ class Animal(
     property = "type"
 )
 class AnimalFeature :
-    GenericFeature<Point, Animal> {
+    GenericFeature<Point, Animal, Int> {
     constructor(location: Point, animal: Animal) : super(location, animal)
     constructor() : super()
 }
