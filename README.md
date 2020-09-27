@@ -8,25 +8,7 @@ a small collection which will hopefully grow in the future.
 The project is split into subpackages to reduce the number of dependencies when only a subset
 of the functionality is required.
 
-## How to use?
-
-These libraries can be pulled into projects using [jitpack](https://jitpack.io/#nmandery/keo) - service which builds libraries on the fly directly
-from the github repository. The service can be directly referenced from a maven `pom.xml` or gradles `build.gradle` - see the instructions on the site.
-
-One short example for gradle:
-
-```groovy
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-dependencies {
-    implementation 'com.github.nmandery:keo-core:GIT_TAG'
-    implementation 'com.github.nmandery:keo-geojson:GIT_TAG'
-}
-```
+Packages are available via github.
 
 ## Available libraries
 
@@ -50,7 +32,7 @@ Usage:
 
 ```kotlin
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.nmandery.keo.geojson.registerJTSGeoJSON
+import net.nmandery.keo.geojson.registerJTSGeoJSON
 
 // ...
 

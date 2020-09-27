@@ -12,7 +12,7 @@ buildscript {
 
 allprojects{
     version = '1.0-SNAPSHOT'
-    group 'com.github.nmandery.keo'
+    group 'net.nmandery.keo'
 }
 
 subprojects {
