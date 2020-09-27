@@ -1,9 +1,0 @@
-dependencies {
-    // additional dependencies
-    compile project(':keo-core')
-}
-
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    test.kotlin.srcDirs += 'test/main/kotlin'
-}
