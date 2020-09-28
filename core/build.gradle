@@ -1,8 +1,0 @@
-dependencies {
-    // additional dependencies
-}
-
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    test.kotlin.srcDirs += 'test/main/kotlin'
-}
