@@ -28,3 +28,9 @@ fun GeometryCollection.linearrings(): List<LinearRing> = this.extract()
 fun GeometryCollection.linestrings(): List<LineString> = this.extract()
 
 fun GeometryCollection.collections(): List<GeometryCollection> = this.extract()
+
+fun GeometryCollection.geometries(): List<Geometry> = this.extract()
+
+fun Polygon.interiorRings(): List<LinearRing> =
+    (0 until this.numInteriorRing)
+        .mapNotNull { idx -> this.getInteriorRingN(idx) }
