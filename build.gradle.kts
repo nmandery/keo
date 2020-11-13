@@ -41,7 +41,7 @@ fun getCommitFromGit(fallback: String = "unknown"): String {
         }
         val isDirty = ByteArrayOutputStream().use { os ->
             exec {
-                commandLine("git", "describe", "--dirty", "--always", "--candidates", "0")
+                commandLine("git", "describe", "--dirty", "--always")
                 standardOutput = os
             }
             os.toString("UTF8").lines().firstOrNull()?.endsWith("-dirty") ?: false
@@ -52,7 +52,7 @@ fun getCommitFromGit(fallback: String = "unknown"): String {
             commit
         }
     } catch (e: Exception) {
-        println("not build from a git repository")
+        println("not build from a git repository: ${e.message}")
         fallback
     }
 }
