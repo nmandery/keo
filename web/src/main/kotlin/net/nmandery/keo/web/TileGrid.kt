@@ -57,4 +57,8 @@ open class TileGrid(val extend: Envelope, val tileSize: Int = 1024, val maxZoom:
             ((extend.maxY - extend.minY) / (tileSize * r)).toInt()
         )
     }
+
+    fun contains(tile: Tile): Boolean =
+        maxZoom >= tile.z && extend.intersects(bounds(tile))
+
 }

@@ -16,4 +16,14 @@ class TileGridTest : StringSpec({
         tg.tileExtend(5).shouldBe(Pair(32, 16))
     }
 
+    "contains" {
+        val tg = TileGrid(Envelope(-180.0, 180.0, -90.0, 90.0), maxZoom = 4)
+        tg.contains(Tile(2,3, 3)).shouldBe(true)
+    }
+
+    "not-contains" {
+        val tg = TileGrid(Envelope(-180.0, 180.0, -90.0, 90.0), maxZoom = 4)
+        tg.contains(Tile(20,30, 3)).shouldBe(false)
+        tg.contains(Tile(2,3, 5)).shouldBe(false)
+    }
 })
