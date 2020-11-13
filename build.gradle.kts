@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
     kotlin("jvm") version "1.4.10" apply false
     java
@@ -18,9 +20,8 @@ buildscript {
     }
 }
 
-
 allprojects {
-    version = "1.1-SNAPSHOT"
+    version = getCommitFromGit()
     group = "net.nmandery.keo"
 
     repositories {
@@ -29,9 +30,38 @@ allprojects {
     }
 }
 
+fun getCommitFromGit(fallback: String = "unknown"): String {
+    return try {
+        val commit = ByteArrayOutputStream().use { os ->
+            exec {
+                commandLine("git", "show", "-s", "--format=%h")
+                standardOutput = os
+            }
+            os.toString("UTF8").lines().firstOrNull() ?: "unknown"
+        }
+        val isDirty = ByteArrayOutputStream().use { os ->
+            exec {
+                commandLine("git", "describe", "--dirty", "--always", "--candidates", "0")
+                standardOutput = os
+            }
+            os.toString("UTF8").lines().firstOrNull()?.endsWith("-dirty") ?: false
+        }
+        if (isDirty) {
+            "${commit}_dirty"
+        } else {
+            commit
+        }
+    } catch (e: Exception) {
+        println("not build from a git repository")
+        fallback
+    }
+}
+
+
 subprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
+    apply(plugin = "kotlin")
     dependencies {
         implementation(kotlin("stdlib-jdk8", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
         implementation(kotlin("reflect", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
@@ -41,7 +71,7 @@ subprojects {
         implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.17.1")
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     tasks.withType<Test>() {
         useJUnitPlatform()
