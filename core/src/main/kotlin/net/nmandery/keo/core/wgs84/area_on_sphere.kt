@@ -1,5 +1,6 @@
 package net.nmandery.keo.core.wgs84
 
+import net.nmandery.keo.core.RADIUS_EARTH_METERS
 import net.nmandery.keo.core.geometries
 import net.nmandery.keo.core.interiorRings
 import org.locationtech.jts.geom.Geometry

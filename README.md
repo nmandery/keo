@@ -17,8 +17,6 @@ Packages are available via github.
 package name: `keo-core`
 
 The core package provides functionality shared between multiple subprojects. 
-Currently there is not to much to see in this package.
-
 
 ### geojson
 
@@ -42,15 +40,6 @@ om.registerJTSGeoJSON()
 // Now jacksons object mapper supports the JTS types
 ```
 
-### web
-
-package name: `keo-web`
-
-Web-mapping related things:
-
-* a TileGrid implementation
-* Functions to reproject between WGS84 and Spherical-Pseudo-Mercator without requiring [GeoTools](https://www.geotools.org/).
- 
 ### optimize
 
 package name: `keo-optimize`
