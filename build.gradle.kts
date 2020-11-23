@@ -71,7 +71,7 @@ subprojects {
         implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.17.1")
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
-        kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     }
     tasks.withType<Test>() {
         useJUnitPlatform()
@@ -82,7 +82,7 @@ subprojects {
         }
     }
     configure<JavaPluginConvention> {
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
     }
     publishing {
         repositories {
