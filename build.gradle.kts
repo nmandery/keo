@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("jvm") version "1.4.10" apply false
+    kotlin("jvm") version "1.4.20" apply false
     java
     `maven-publish`
 }
@@ -15,7 +15,7 @@ buildscript {
         classpath(
             group = "org.jetbrains.kotlin",
             name = "kotlin-gradle-plugin",
-            version = "1.4.10"
+            version = "1.4.20"
         )
     }
 }
