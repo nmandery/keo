@@ -21,7 +21,7 @@ buildscript {
 }
 
 allprojects {
-    version = getCommitFromGit()
+    version = getVersionFromGit()
     group = "net.nmandery.keo"
 
     repositories {
@@ -30,30 +30,29 @@ allprojects {
     }
 }
 
-fun getCommitFromGit(fallback: String = "unknown"): String {
+fun getVersionFromGit(fallback: String = "unknown"): String {
     return try {
-        val commit = ByteArrayOutputStream().use { os ->
-            exec {
-                commandLine("git", "show", "-s", "--format=%h")
-                standardOutput = os
-            }
-            os.toString("UTF8").lines().firstOrNull() ?: "unknown"
-        }
-        val isDirty = ByteArrayOutputStream().use { os ->
+        ByteArrayOutputStream().use { os ->
             exec {
                 commandLine("git", "describe", "--dirty", "--always")
                 standardOutput = os
             }
-            os.toString("UTF8").lines().firstOrNull()?.endsWith("-dirty") ?: false
+            os.toString("UTF8").lines().firstOrNull() ?: "unknown"
         }
-        if (isDirty) {
-            "${commit}_dirty"
-        } else {
-            commit
-        }
+            .run {
+                if ("^v[0-9].".toRegex().containsMatchIn(this)) {
+                    this.trimStart('v')
+                } else {
+                    this
+                }
+            }
+            // replace "-" so this is not understood as a classifier of the java package
+            .replace("-", "_")
     } catch (e: Exception) {
-        println("not build from a git repository: ${e.message}")
+        println("not build from a git repository")
         fallback
+    }.also {
+        println("${project.name} version: $it")
     }
 }
 
@@ -90,8 +89,8 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/nmandery/keo")
                 credentials {
-                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("GH_TOKEN")
                 }
             }
         }
