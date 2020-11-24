@@ -83,6 +83,9 @@ subprojects {
     configure<JavaPluginConvention> {
         sourceCompatibility = JavaVersion.VERSION_11
     }
+    java {
+        withSourcesJar()
+    }
     publishing {
         repositories {
             maven {
