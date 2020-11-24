@@ -31,6 +31,6 @@ fun Envelope.makeGrid(nCellsX: Long, nCellsY: Long): Sequence<Envelope> {
 
 fun Envelope.makeGridUsingCellSize(xSize: Double, ySize: Double) =
     makeGrid(
-        (width/xSize).coerceAtLeast(1.0).toLong(),
-        (height/ySize).coerceAtLeast(1.0).toLong()
+        (width / xSize).coerceAtLeast(1.0).toLong(),
+        (height / ySize).coerceAtLeast(1.0).toLong()
     )

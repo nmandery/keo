@@ -8,6 +8,9 @@ import org.locationtech.jts.geom.util.GeometryCombiner
  **/
 fun Collection<Geometry>.collectGeometries(): Geometry = GeometryCombiner(this).combine()
 
+@JvmName("collectGeometriesNotNull")
+fun Collection<Geometry?>.collectGeometries(): Geometry = filterNotNull().collectGeometries()
+
 
 inline fun <reified T : Geometry> GeometryCollection.extract(): List<T> =
     (0 until this.numGeometries)
@@ -49,7 +52,7 @@ fun Envelope.toPolygon(geometryFactory: GeometryFactory = GeometryFactory()): Po
  * lazily slice the geometry by teh given sequence of geometries. Returns
  * only non-empty intersections.
  */
-inline fun <reified T: Geometry> T.sliceBy(polygons: Sequence<Polygon>): Sequence<Geometry> =
+inline fun <reified T : Geometry> T.sliceBy(polygons: Sequence<Polygon>): Sequence<Geometry> =
     polygons.flatMap { other ->
         val isec = this.intersection(other)
         if (isec.isEmpty) {
