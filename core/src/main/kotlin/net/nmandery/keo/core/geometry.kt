@@ -49,10 +49,10 @@ fun Envelope.toPolygon(geometryFactory: GeometryFactory = GeometryFactory()): Po
 )
 
 /**
- * lazily slice the geometry by teh given sequence of geometries. Returns
+ * lazily slice the geometry by the given sequence of geometries. Returns
  * only non-empty intersections.
  */
-inline fun <reified T : Geometry> T.sliceBy(polygons: Sequence<Polygon>): Sequence<Geometry> =
+inline fun <reified T : Geometry> T.sliceBy(polygons: Sequence<Polygon>): Sequence<T> =
     polygons.flatMap { other ->
         val isec = this.intersection(other)
         if (isec.isEmpty) {
