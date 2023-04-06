@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("jvm") version "1.4.20" apply false
+    kotlin("jvm") version "1.8.20" apply false
     java
     `maven-publish`
 }
@@ -9,13 +9,12 @@ plugins {
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath(
             group = "org.jetbrains.kotlin",
             name = "kotlin-gradle-plugin",
-            version = "1.4.20"
+            version = "1.8.20"
         )
     }
 }
@@ -26,7 +25,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -65,9 +63,9 @@ subprojects {
         implementation(kotlin("stdlib-jdk8", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
         implementation(kotlin("reflect", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
         testImplementation(kotlin("test", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
-        testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
+        testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
 
-        implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.17.1")
+        implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.19.0")
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
@@ -80,7 +78,7 @@ subprojects {
             events("passed", "skipped", "failed", "standard_out", "standard_error")
         }
     }
-    configure<JavaPluginConvention> {
+    configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_11
     }
     java {
