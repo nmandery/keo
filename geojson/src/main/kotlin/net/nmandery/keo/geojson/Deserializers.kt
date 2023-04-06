@@ -13,7 +13,7 @@ class GeometryDeserializer<T : Geometry>(private val geometryParser: GeometryPar
     }
 }
 
-class CoordinateDeserializer() : JsonDeserializer<Coordinate>() {
+class CoordinateDeserializer : JsonDeserializer<Coordinate>() {
     override fun deserialize(jsonParser: JsonParser, deserializationContext: DeserializationContext): Coordinate {
         val root = jsonParser.codec.readTree<JsonNode>(jsonParser)
         return readCoordinate(root, deserializationContext)
@@ -33,7 +33,7 @@ class CoordinateSequenceDeserializer(private val coordinateSequenceFactory: Coor
     }
 }
 
-class EnvelopeDeserializer() : JsonDeserializer<Envelope>() {
+class EnvelopeDeserializer : JsonDeserializer<Envelope>() {
     override fun deserialize(jsonParser: JsonParser, deserializationContext: DeserializationContext): Envelope {
         val node = jsonParser.codec.readTree<JsonNode>(jsonParser)
         return readEnvelope(node, deserializationContext)

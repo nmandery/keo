@@ -72,7 +72,7 @@ fun List<Coordinate>.optimizeOrderingForShortestPath(maxIterations: Int = 50): L
  * reorder the Coordinates in the CoordinateSequence to form the shortest possible path
  */
 fun CoordinateSequence.optimizeOrderingForShortestPath(maxIterations: Int = 50): CoordinateArraySequence? {
-    val optimized = toCoordinateArray().asList().optimizeOrderingForShortestPath(maxIterations = maxIterations);
+    val optimized = toCoordinateArray().asList().optimizeOrderingForShortestPath(maxIterations = maxIterations)
     return if (optimized != null) {
         CoordinateArraySequence(optimized.toTypedArray())
     } else {
@@ -85,11 +85,7 @@ fun CoordinateSequence.optimizeOrderingForShortestPath(maxIterations: Int = 50):
  */
 fun List<Point>.optimizeOrderingForShortestPath(gf: GeometryFactory, maxIterations: Int = 50): List<Point>? {
     val l = mapNotNull { it.coordinate }.optimizeOrderingForShortestPath(maxIterations = maxIterations)
-    return if (l != null) {
-        l.mapNotNull { Point(CoordinateArraySequence(arrayOf(it)), gf) }
-    } else {
-        null
-    }
+    return l?.map { Point(CoordinateArraySequence(arrayOf(it)), gf) }
 }
 
 

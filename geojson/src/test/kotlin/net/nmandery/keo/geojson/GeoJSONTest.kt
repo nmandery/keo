@@ -285,7 +285,7 @@ class GeoJSONTest : StringSpec({
         val minY = 12.3
         val maxY = 33.4
         val e = objectMapper().readValue(
-            """[${minX},${minY},"${maxX}",${maxY}]""",
+            """[${minX},${minY},"$maxX",${maxY}]""",
             Envelope::class.java
         )
         e.shouldNotBeNull()

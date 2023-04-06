@@ -67,10 +67,10 @@ subprojects {
 
         implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.19.0")
     }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     }
-    tasks.withType<Test>() {
+    tasks.withType<Test> {
         useJUnitPlatform()
         testLogging {
             // show standard out and standard error of the test JVM(s) on the console

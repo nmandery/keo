@@ -35,7 +35,7 @@ private val objectMapper: ObjectMapper by lazy {
     om
 }
 
-fun Geometry.geojsonGeometry() = objectMapper.writeValueAsString(this)
+fun Geometry.geojsonGeometry() = objectMapper.writeValueAsString(this)!!
 
 data class JTSGeoJsonConfiguration(
 
@@ -51,8 +51,8 @@ data class JTSGeoJsonConfiguration(
 )
 
 class JTSGeoJSON(
-    val configuration: JTSGeoJsonConfiguration = JTSGeoJsonConfiguration(),
-    val gf: GeometryFactory = GeometryFactory()
+    configuration: JTSGeoJsonConfiguration = JTSGeoJsonConfiguration(),
+    gf: GeometryFactory = GeometryFactory()
 ) : SimpleModule("JTSGeoJSON") {
 
     init {

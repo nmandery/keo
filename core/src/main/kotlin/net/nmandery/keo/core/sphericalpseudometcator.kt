@@ -11,7 +11,7 @@ import kotlin.math.tan
  *
  * https://wiki.openstreetmap.org/wiki/Mercator
  */
-object SphericalPseudoMetcator {
+object SphericalPseudoMercator {
 
     /**
      * Returns the Spherical Mercator (x, y) in meters

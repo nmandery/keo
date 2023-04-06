@@ -33,7 +33,7 @@ open class GenericFeature<G : Geometry, T : Any> {
         this.geometry = geometry
     }
 
-    constructor() {}
+    constructor()
 }
 /**
  * Using this generic class requires adding all jackson annotations
@@ -83,7 +83,7 @@ class Feature {
         this.geometry = geometry
     }
 
-    constructor() {}
+    constructor()
 }
 
 

@@ -25,16 +25,17 @@ fun Geometry.areaOnSphereApprox(sphereRadius: Double = RADIUS_EARTH_METERS): Dou
             .toList()
             .windowed(2)
             .filter { it.size == 2 }
-            .sumByDouble { coords ->
+            .sumOf { coords ->
                 Math.toRadians(coords[1].x - coords[0].x) * (2.0 + sin(Math.toRadians(coords[0].y)) + sin(
                     Math.toRadians(
                         coords[1].y
                     )
                 ))
             }.absoluteValue * sphereRadius.pow(2) / 2.0
-        is Polygon -> exteriorRing.areaOnSphereApprox(sphereRadius) - interiorRings().sumByDouble {
+        is Polygon -> exteriorRing.areaOnSphereApprox(sphereRadius) - interiorRings().sumOf {
             it.areaOnSphereApprox(sphereRadius)
         }
-        is GeometryCollection -> geometries().sumByDouble { it.areaOnSphereApprox(sphereRadius) }
+
+        is GeometryCollection -> geometries().sumOf { it.areaOnSphereApprox(sphereRadius) }
         else -> 0.0
     }
